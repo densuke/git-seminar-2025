@@ -96,6 +96,42 @@ FF(Fast-Forwardの略です)はこうなっています。
 
 ---
 
+## 演習: Fast-Forwardを体験しよう
+
+3時間目に使っていたリポジトリをそのまま使います。
+指示通りにやっているなら、そのまま継続利用できます。
+
+```powershell
+PS> cd ~/git-branch-demo
+PS> git branch # mainとfeature/new-featureがあるはず、最後にmainに戻ってる?
+PS> git switch main # 強制的に戻っておく
+```
+
+---
+
+## 新規ブランチでちょっと遊ぶ
+
+```powershell
+PS> git switch -c bugfix/newfile # 作成・切り替え
+PS> new-item G; git add G; git commit -m "Add file G" # ブランチ上でコミット
+PS> git switch main # mainに戻る
+PS> git branch # ブランチ一覧確認、bugfix/newfileがあるはず
+```
+
+---
+
+## マージ実行(Fast-Forward)
+
+```powershell
+PS> git merge bugfix/newfile # マージ実行
+# マージコミットは作成されないはず(Fast-Forwardと出力される)
+PS> git log --oneline # 履歴を確認
+```
+
+他のブランチやmain上でのコミットが作業中に起きていなければFFとなる
+
+---
+
 ## マージの種類: 3-wayマージ
 
 *   **条件**: 履歴が分岐している場合です。
@@ -124,6 +160,32 @@ gitGraph
 *   複数の親コミットを持ちます。
 *   異なる開発ラインの統合点を示します。
 *   履歴の分岐と合流を明確に記録します。
+
+---
+
+## 演習: マージコミットの実施
+
+* 実は現在のリポジトリでは、3時間目にfeature/new-featureブランチを作成しています。
+* しかも先程FやGを作っています。
+
+条件を満たしているのでマージコミットが可能です。
+
+```powershell
+PS> git switch main # mainに戻る
+PS> git merge feature/new-feature # マージ実行
+# マージコミットが作成されるはず
+PS> git log --oneline # 履歴を確認(マージコミットが生成されている)
+```
+---
+
+### 演習: マージコミットを確認する
+
+最後のマージコミットのコミットオブジェクトを眺めてみよう
+
+```powershell
+PS> git log --oneline -1 #最後のコミット(マージコミット) IDを確認
+PS> git cat-file -p <コミットID> # コミットオブジェクトの内容を確認
+```
 
 ---
 
