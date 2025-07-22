@@ -1,0 +1,59 @@
+name: Deploy Marp slides to GitHub Pages
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Setup Marp CLI
+        run: npm install -g @marp-team/marp-cli
+
+      - name: Build slides
+        run: |
+          mkdir -p ./dist
+          # lecture01.mdからlecture08.mdまでをループでHTMLに変換
+          for i in $(seq -f "%02g" 1 8); do
+            if [ -f "lecture${i}.md" ]; then
+              marp lecture${i}.md -o ./dist/lecture${i}.html
+            fi
+          done
+          
+          # 各スライドへのリンクを持つindex.htmlを生成
+          echo '<html><head><meta charset="UTF-8"><title>Git Seminar Slides</title></head><body>' > ./dist/index.html
+          echo '<h1>Git Seminar Slides</h1><ul>' >> ./dist/index.html
+          for file in ./dist/lecture*.html; do
+            if [ -f "$file" ]; then
+              filename=$(basename "$file")
+              echo "<li><a href='$filename'>${filename%.html}</a></li>" >> ./dist/index.html
+            fi
+          done
+          echo '</ul></body></html>' >> ./dist/index.html
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v4
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: './dist'
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
