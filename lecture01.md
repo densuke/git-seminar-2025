@@ -2,7 +2,7 @@
 marp: true
 theme: default
 paginate: true
-#mermaid: true
+mermaid: true
 ---
 <script type="module">
 import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11.4.1/dist/mermaid.esm.min.mjs';
@@ -80,12 +80,12 @@ mermaid.initialize({ startOnLoad: true });
 *   ホワイトボードに、コミットを表す円と、親コミットを指す矢印を描く。
 *   これが研修全体を通じて最も重要な視覚モデルとなる。
 
-<pre class="mermaid">
+```mermaid
 graph RL
     D((D)) --> C((C))
     C --> B((B))
     B --> A((A))
-</pre>
+```
 
 *Gitのコミット履歴は、このように一方通行のつながりを持つグラフで表現されます。*
 
