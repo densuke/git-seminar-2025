@@ -1,0 +1,11 @@
+{
+  "dependencies": {
+    "@marp-team/marp-cli": "^4.2.0",
+    "@mermaid-js/mermaid-cli": "^11.6.0"
+  },
+  "devDependencies": {
+  },
+  "scripts": {
+    "marp": "marp --server --html -I ."
+  }
+}
